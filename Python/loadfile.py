@@ -8,6 +8,6 @@ def load_data(file_name):
     dataset = read_csv(file_name)
     dataset = dataset.sample(frac=1).reset_index(drop=True)
     print(dataset)
-    X = dataset.drop("label", axis=1)
-    y = dataset["label"]
+    X = dataset.drop("label", axis=1).to_numpy()
+    y = dataset["label"].to_numpy()
     return X, y
