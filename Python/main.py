@@ -1,5 +1,7 @@
 import sys
 
+import KNNmodel
+
 # the function
 def imageAnalysis(model_type, image):
   print("your choice of model: ", model_type)
@@ -11,6 +13,9 @@ def imageAnalysis(model_type, image):
   # save the processed data from the wavelet transform function
   
   # pass the processed data through the selected model
+  if model_type == 'KNN':
+    # TODO
+    print("do something")
   
   # save result
   
