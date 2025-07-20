@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
 from torchvision.io import decode_image
+from PIL import Image
 
 def get_classmap(img_dir):
   """
@@ -35,7 +36,7 @@ class USCoinsDataset(Dataset):
   
   def __getitem__(self, idx):
     img_path = os.path.join(self.img_dir, self.img_anno.iloc[idx, 0], self.img_anno.iloc[idx, 1])
-    image = decode_image(img_path)
+    image = Image.open(img_path)
     # Derive label from image folder
     label = self.classmap[self.img_anno.iloc[idx, 0]]
     if self.transform:
