@@ -31,7 +31,7 @@ class USCoinsDataset(Dataset):
     self.classmap = get_classmap(img_dir)
     
   def __len__(self):
-    return len(self.img_labels)
+    return len(self.img_anno)
   
   def __getitem__(self, idx):
     img_path = os.path.join(self.img_dir, self.img_anno.iloc[idx, 0], self.img_anno.iloc[idx, 1])
