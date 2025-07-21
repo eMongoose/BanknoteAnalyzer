@@ -15,11 +15,13 @@ transform = transforms.Compose([
   transforms.Normalize((0.5, 0.5, 0.5),(0.5, 0.5, 0.5))
 ])
 
-def load_data():
+def load_data(batch_size = 32, num_workers = 0):
   '''
+  Arguments:
+    batch_size (Integer): size of each batch of images
+    num_workers (Integer): number of concurrentprocesses to run
   Returns:
-    train_set (Dataloader): training set
-    test_set (DataLoader): test set
+    tuple (Dataloader): train_set and test_set
   '''
   csv_file = os.path.join("Dataset", "dataset.csv")
   img_dir = os.path.join("Dataset", "coins")
@@ -27,8 +29,8 @@ def load_data():
 
   train_set, test_set = random_split(dataset, [3000, 749]) # roughly 4:1 split
 
-  train_set = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
-  test_set = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS)
+  train_set = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+  test_set = DataLoader(test_set, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
   return train_set, test_set
 
