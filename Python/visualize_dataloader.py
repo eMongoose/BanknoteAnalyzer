@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from dataloader import load_data
-from torch.utils.data import DataLoader
 from torchvision.utils import make_grid
 
 
