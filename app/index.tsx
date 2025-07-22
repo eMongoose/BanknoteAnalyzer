@@ -84,23 +84,15 @@ export default function HomeScreen() {
   }
 
   const analyzeCoin = async () => {
-    try {
-      console.log("Analyzing the coin...");
-      const response = await fetch("http://localhost:5000/getCoin");
-
-      if (!response.ok) {
-        throw new Error("Cameron is a goat!");
-      }
-
-      const json: coinDataInterface = await response.json();
-      setCoinData(json);
-
-      console.log("tung tung tung ", json); // Log the fetched data
-    } catch (error) {
-      console.error("Error analyzing coin:", error);
+    console.log("Analyzing the coin...");
+    const response = await fetch("http://localhost:5000/getCoin");
+    if (!response.ok) {
+      throw new Error("Cameron is a goat!");
     }
+    const json: coinDataInterface = await response.json();
+    setCoinData(json);
+    console.log("Data: ", json);
   };
-
   /////////////////////////////////////////////////////////////////////////////////////////////////
   // main function
   return (
