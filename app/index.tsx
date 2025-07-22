@@ -14,12 +14,19 @@ import {
   launchCamera,
   launchImageLibrary
 } from 'react-native-image-picker';
+import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+interface coinDataInterface {
+  name: String
+  currency: String
+  value: Double
+}
+
 export default function HomeScreen() {
   // state declarations
   const [img, setImg] = useState<string | null>(null);
-
   const [isVisible, setIsVisible] = useState(true);
+  const [coinData, setCoinData] = useState<coinDataInterface | null>(null);
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -75,6 +82,25 @@ export default function HomeScreen() {
       console.log("Error in format: ", result);
     }
   }
+
+  const analyzeCoin = async () => {
+    try {
+      console.log("Analyzing the coin...");
+      const response = await fetch("http://localhost:5000/getCoin");
+
+      if (!response.ok) {
+        throw new Error("Cameron is a goat!");
+      }
+
+      const json: coinDataInterface = await response.json();
+      setCoinData(json);
+
+      console.log("tung tung tung ", json); // Log the fetched data
+    } catch (error) {
+      console.error("Error analyzing coin:", error);
+    }
+  };
+
   /////////////////////////////////////////////////////////////////////////////////////////////////
   // main function
   return (
@@ -82,14 +108,14 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#ffffffff' }}
       headerImage={<Image style={styles.banner} source={require('@/assets/images/partial-react-logo.png')} />}>
 
-      <ThemedView style={{ height: 500}}>
+      <ThemedView style={{ height: 500 }}>
         {/* Title: Coin Identifier*/}
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">Coin Identifier</ThemedText>
         </ThemedView>
 
         {isVisible ?
-          <ThemedView style={{position: 'absolute', bottom: 0, left: 0, right: 0}}>
+          <ThemedView style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
             <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', width: '80%', margin: 'auto', gap: 8 }}>
               <Pressable style={styles.pictureButton} onPress={openCamera}>
                 <ThemedText style={styles.pictureButtonText}>Take Picture</ThemedText>
@@ -118,13 +144,13 @@ export default function HomeScreen() {
         {/* Use this picture */}
         {/* There's probably a better way of doing this lol*/}
         {img && (
-          <ThemedView style={{ display: 'flex', flexDirection: 'column', gap: 8}}>
+          <ThemedView style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <ThemedView style={{ margin: 'auto' }}>
-              <Pressable style={styles.retakeButtonContainer} onPress={openCamera}>
+              <Pressable style={styles.retakeButtonContainer} onPress={analyzeCoin}>
                 <ThemedText style={styles.pictureButtonText}>Analyze Coin</ThemedText>
               </Pressable>
             </ThemedView>
-            <ThemedText style={{ textAlign: 'center', fontWeight: 500}}>OR</ThemedText>
+            <ThemedText style={{ textAlign: 'center', fontWeight: 500 }}>OR</ThemedText>
             <ThemedView>
               <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', width: '80%', margin: 'auto' }}>
                 <Pressable style={styles.pictureButton} onPress={openCamera}>
