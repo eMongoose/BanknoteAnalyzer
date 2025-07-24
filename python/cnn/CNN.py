@@ -1,7 +1,5 @@
 import torch
 import torch.nn as nn
-import torchvision
-import torchvision.transforms as transforms
 
 class CNN(nn.Module):
     def __init__(self, num_classes):

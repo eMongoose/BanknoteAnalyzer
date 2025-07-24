@@ -1,8 +1,8 @@
-from python.dataset.dataloader import load_data
+from ..dataset.dataloader import load_data
 import torch
 from torch.optim import SGD
 import torch.nn as nn
-from python.cnn.CNN import CNN
+from .CNN import CNN
 import os
 
 def train_CNN(epochs = 20, learning_rate = 0.001, debugging = False):
@@ -48,8 +48,5 @@ def train_CNN(epochs = 20, learning_rate = 0.001, debugging = False):
     
     print(f'Accuracy of the network on the train images: {100 * correct / total} %')
 
-  print("Saving model to /Python/Models/")
+  print("Saving model to /python/Models/")
   torch.save(model.state_dict(), os.path.join("python", "Models", "CNN.torch"))
-
-
-train_CNN(debugging = False)

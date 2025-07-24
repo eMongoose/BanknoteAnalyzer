@@ -1,9 +1,9 @@
 import torch
 import os
-from python.cnn.CNN import CNN
+from .CNN import CNN
 from PIL import Image
 
-from python.dataset.dataloader import transform
+from ..dataset.dataloader import transform
 
 def predict(img_path):
   local_device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
