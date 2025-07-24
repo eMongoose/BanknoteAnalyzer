@@ -1,16 +1,16 @@
 import torch
 import os
-from CNN import CNN
+from python.cnn.CNN import CNN
 from PIL import Image
 
-from dataloader import transform, load_data
+from python.dataset.dataloader import transform
 
 def predict(img_path):
   local_device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
   # Load model from memory
   model = CNN(3)
-  model.load_state_dict(torch.load(os.path.join("Python", "Models", "CNN.torch")))
+  model.load_state_dict(torch.load(os.path.join("python", "Models", "CNN.torch")))
 
   # Image needs to be reshaped to include batch info (1)
   # This is because model expects multiple images to be loaded

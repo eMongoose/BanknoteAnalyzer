@@ -5,7 +5,7 @@ from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader, random_split, Subset
 from torch import randperm
 
-from USCoinsDataset import USCoinsDataset
+from python.dataset.USCoinsDataset import USCoinsDataset
 
 BATCH_SIZE = 64
 NUM_WORKERS = 0 # Investigate RunTimeError when increasing this value
