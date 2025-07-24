@@ -31,7 +31,6 @@ def load_data(batch_size = 32, num_workers = 0, debugging = False):
   
   if debugging == True:
     idx = randperm(len(dataset))[:150]
-    print(idx.numpy())
     dataset = Subset(dataset, idx.numpy())
 
     train_set, test_set = random_split(dataset, [120, 30]) # 4:1 split
