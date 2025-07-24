@@ -24,6 +24,6 @@ def predict(img_path):
 
     output = model(image)
  
-    prediction = torch.argmax(output.data).numpy()
+    prediction = torch.argmax(output.data).item()
 
     return prediction
