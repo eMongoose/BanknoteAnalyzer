@@ -44,10 +44,10 @@ export default function HomeScreen() {
       saveToPhotos: false,
     };
     const result = await launchCamera(options);
-    if (result.didCancel) { // failed
-      console.log("No image was selected")
+    if (result.didCancel) {
+      console.log("No image was selected.")
     }
-    else if (result.errorCode) { // failed
+    else if (result.errorCode) {
       console.log(result.errorMessage);
     }
     else if (result.assets && result.assets.length > 0) { // success
@@ -55,8 +55,8 @@ export default function HomeScreen() {
       console.log("Image URI: ", img);
       setImg(img ?? null); // if img is undefined, setImg = NULL
     }
-    else { // failed
-      console.log("Error in format: ", result);
+    else {
+      console.log("Error: ", result);
     }
   }
 
@@ -67,10 +67,10 @@ export default function HomeScreen() {
       selectionLimit: 1,
     };
     const result = await launchImageLibrary(options);
-    if (result.didCancel) { // failed
+    if (result.didCancel) {
       console.log("No image was selected")
     }
-    else if (result.errorCode) { // failed
+    else if (result.errorCode) {
       console.log(result.errorMessage);
     }
     else if (result.assets && result.assets.length > 0) { // success
@@ -78,20 +78,61 @@ export default function HomeScreen() {
       console.log("Image URI: ", img);
       setImg(img ?? null); // if img is undefined, setImg = NULL
     }
-    else { // failed
-      console.log("Error in format: ", result);
+    else {
+      console.log("Error: ", result);
     }
   }
+  /////////////////////////////////////////////////////////////////////////////
 
   const analyzeCoin = async () => {
-    console.log("Analyzing the coin...");
-    const response = await fetch("http://localhost:5000/getCoin");
-    if (!response.ok) {
-      throw new Error("Cameron is a goat!");
+    console.log("Analyzing the image...");
+
+    // error  handling
+    if (!img) {
+      console.log("There is no image selected!")
+      return;
     }
-    const json: coinDataInterface = await response.json();
-    setCoinData(json);
-    console.log("Data: ", json);
+
+    try {
+      // https://developer.mozilla.org/en-US/docs/Web/API/FormData
+      // build a formdata object
+      const form = new FormData();
+      const fileName = img.split('/').pop() ?? `coin_${Date.now()}.jpg`; // clean up the path to get the filename
+      const ext = fileName.split('.').pop()?.toLowerCase(); // cleanup the filename to get the MIME extension
+
+      // file of MIME type (image, jpeg, etc.)
+      const mime =
+        ext === 'png' ? 'image/png' :
+          ext === 'heic' ? 'image/heic' :
+            'image/jpeg';
+
+      // append it to the formdata
+      // https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
+      form.append('image', {
+        uri: img,
+        name: fileName,
+        type: mime,
+      } as any);
+
+      // fetch and send formdata to the server
+      const response = await fetch("http://localhost:5000/getCoin", {
+        method: 'POST',
+        body: form,
+        headers: { Accept: 'application/json', },
+      });
+
+      // error handling
+      if (!response.ok) {
+        throw new Error("Error 2");
+      }
+
+      const json: coinDataInterface = await response.json();
+      setCoinData(json);
+      // console.log("Data: ", json);
+    }
+    catch (error) {
+      console.log("Error: ", error);
+    }
   };
   /////////////////////////////////////////////////////////////////////////////////////////////////
   // main function
