@@ -15,6 +15,9 @@ import {
   launchImageLibrary
 } from 'react-native-image-picker';
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
+
+const API_BASE = "http://192.168.68.55:5000"
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 interface coinDataInterface {
   name: String
@@ -89,7 +92,7 @@ export default function HomeScreen() {
 
     // error  handling
     if (!img) {
-      console.log("There is no image selected!")
+      console.log("Error 1: There is no image selected!")
       return;
     }
 
@@ -115,7 +118,8 @@ export default function HomeScreen() {
       } as any);
 
       // fetch and send formdata to the server
-      const response = await fetch("http://localhost:5000/getCoin", {
+      
+      const response = await fetch(`${API_BASE}/getCoin`, {
         method: 'POST',
         body: form,
         headers: { Accept: 'application/json', },
@@ -131,7 +135,7 @@ export default function HomeScreen() {
       // console.log("Data: ", json);
     }
     catch (error) {
-      console.log("Error: ", error);
+      console.log("Error 3: ", error);
     }
   };
   /////////////////////////////////////////////////////////////////////////////////////////////////
