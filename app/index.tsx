@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Image } from 'expo-image';
 import { useState } from 'react';
 import {
+  Platform,
   Pressable,
   StyleSheet,
 } from 'react-native';
@@ -111,14 +112,22 @@ export default function HomeScreen() {
 
       // append it to the formdata
       // https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
-      form.append('image', {
-        uri: img,
-        name: fileName,
-        type: mime,
-      } as any);
+      if (Platform.OS === 'web') {
+        // Fetch the blob from the web URL
+        const response = await fetch(img);
+        const blob = await response.blob();
+
+        form.append('image', new File([blob], fileName, { type: mime }));
+      } else {
+        // Native (iOS/Android)
+        form.append('image', {
+          uri: img,
+          name: fileName,
+          type: mime,
+        } as any);
+      }
 
       // fetch and send formdata to the server
-      
       const response = await fetch(`${API_BASE}/getCoin`, {
         method: 'POST',
         body: form,

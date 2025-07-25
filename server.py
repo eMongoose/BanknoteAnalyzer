@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from markupsafe import escape
 from PIL import Image
 
@@ -7,7 +8,8 @@ from python.cnn.CNN_predict import predict
 names = ["Nickel", "Penny", "Quarter"]
 values = [0.05, 0.01, 0.25]
 
-app = Flask(__name__, static_folder="../app", static_url_path="/")
+app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def index():
@@ -24,28 +26,32 @@ def index():
 
 #   return data
 
-@app.post("/getCoin")
-def getCoin(img_data):
+@app.route("/getCoin", methods=['POST'])
+def getCoin():
     # error handling
     if 'image' not in request.files:
       print("Error 1: Failed to receive image.")
-      return
+      return jsonify({"error": "No image received"}), 400
 
     file = request.files['image']
     
     if file.filename == '':
       print("Error 2: Image name is invalid.")
-      return
+      return jsonify({"error": "Empty filename"}), 400
 
-    image = Image.open(file)
-    label = predict(image)
-    
-    data = {
-        "name": names[label],
-        "label": label,
-        "value": values[label],
-    }
-    return data
+    try:
+        label = predict(file)
+        data = {
+            "name": names[label],
+            "label": label,
+            "value": values[label]
+        }
+        print(data)
+        return jsonify(data)
+    except Exception as e:
+        print("Error 3:", str(e))
+        return jsonify({"error": str(e)}), 500
+      
   
 if __name__ =="__main__":
-  app.run()
+  app.run(host="0.0.0.0", port=5000)
