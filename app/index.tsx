@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Image } from 'expo-image';
 import { useState } from 'react';
 import {
+  Modal,
   Platform,
   Pressable,
   StyleSheet,
@@ -17,7 +18,7 @@ import {
 } from 'react-native-image-picker';
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
-const API_BASE = "http://192.168.68.55:5000"
+const API_BASE = "http://192.168.68.54:5000"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 interface coinDataInterface {
@@ -31,6 +32,7 @@ export default function HomeScreen() {
   const [img, setImg] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [coinData, setCoinData] = useState<coinDataInterface | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -142,6 +144,7 @@ export default function HomeScreen() {
       const json: coinDataInterface = await response.json();
       setCoinData(json);
       // console.log("Data: ", json);
+      setModalVisible(true)
     }
     catch (error) {
       console.log("Error 3: ", error);
@@ -162,7 +165,7 @@ export default function HomeScreen() {
 
         {isVisible ?
           <ThemedView style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-            <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', width: '80%', margin: 'auto', gap: 8 }}>
+            <ThemedView style={{ display: 'flex', flexDirection: 'row', gap: 10, width: '60%', justifyContent: 'space-around', margin: 'auto' }}>
               <Pressable style={styles.pictureButton} onPress={openCamera}>
                 <ThemedText style={styles.pictureButtonText}>Take Picture</ThemedText>
               </Pressable>
@@ -188,7 +191,6 @@ export default function HomeScreen() {
           </ThemedView>
         )}
         {/* Use this picture */}
-        {/* There's probably a better way of doing this lol*/}
         {img && (
           <ThemedView style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <ThemedView style={{ margin: 'auto' }}>
@@ -198,7 +200,7 @@ export default function HomeScreen() {
             </ThemedView>
             <ThemedText style={{ textAlign: 'center', fontWeight: 500 }}>OR</ThemedText>
             <ThemedView>
-              <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', width: '80%', margin: 'auto' }}>
+              <ThemedView style={{ display: 'flex', flexDirection: 'row', gap: 10, width: '60%', justifyContent: 'space-around', margin: 'auto' }}>
                 <Pressable style={styles.pictureButton} onPress={openCamera}>
                   <ThemedText style={styles.pictureButtonText}>Retake Picture</ThemedText>
                 </Pressable>
@@ -209,6 +211,32 @@ export default function HomeScreen() {
             </ThemedView>
           </ThemedView>
         )}
+
+        {/* Popup */}
+        <Modal
+          transparent={true}
+          visible={modalVisible}
+        >
+          <ThemedView style={styles.centeredView}>
+            <ThemedView style={styles.modalView}>
+              <ThemedText style={styles.modalTitle}>Coin Results:</ThemedText>
+
+              {/* POPUP CONTENTS HERE */}
+              <ThemedView style={styles.resultsTextContainer}>
+                <ThemedText style={styles.resultsText}>This coin is predicted to be a {coinData?.name}</ThemedText>
+                <ThemedText style={styles.resultsText}>The coin's value is {coinData?.value}</ThemedText>
+              </ThemedView>
+              {/* CLOSE BUTTON */}
+              <Pressable
+                style={styles.buttonClose}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <ThemedText style={styles.textStyle}>Close</ThemedText>
+              </Pressable>
+            </ThemedView>
+          </ThemedView>
+        </Modal>
+
+        {/* END OF TAG */}
       </ThemedView>
     </ParallaxScrollView >
   );
@@ -260,5 +288,66 @@ const styles = StyleSheet.create({
     width: 200,
     backgroundColor: 'white',
     cursor: 'pointer',
+  },
+
+  /*****************************************************/
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.80)',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    gap: 25,
+    paddingLeft: 100,
+    paddingRight: 100
+  },
+
+  buttonClose: {
+    borderRadius: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    elevation: 2,
+    backgroundColor: '#2196F3',
+  },
+
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  modalTitle: {
+    marginBottom: 15,
+    textAlign: 'center',
+    color: 'black'
+  },
+
+  /************************************/
+  resultsTextContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    backgroundColor: 'white'
+  },
+
+  resultsText: {
+    textAlign: 'center',
+    color: 'black'
   }
 });
