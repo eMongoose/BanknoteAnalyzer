@@ -1,10 +1,29 @@
 import torch
 import torch.nn as nn
 
-class CNN(nn.Module):
-    def __init__(self, num_classes):
-        super(CNN, self).__init__()
+"""
+Adding Convolution Layers Template:
+
+# convolution layer
+self.conv[REPLACE WITH VALUE] = nn.Conv2d(in_channel, out_channe, kernel_size)
+self.conv[REPLACE WITH VALUE+1] = nn.Conv2d(in_channel, out_channe, kernel_size)
         
+# pooling layers (resizing image)
+self.max_pool[REPLACE WITH VALUE] = nn.MaxPool2d(kernel_size, stride)
+
+"""
+
+# ========================================================================================================= #
+class CNN(nn.Module):
+    def __init__(self,
+                 num_classes = 3,       # 3 classes (3 types of coins)               
+                 num_inputs = 1600,     # flattened feature size after convolution layers
+                 num_neurons = [128],   # hidden-layer size
+                 pool_every = 2):       # max-pool after every conv block
+        # conv_channels = number of filters for each conv layer
+        # neuron_lay = number of neurons, fully connected hidden layers
+        super().__init__()
+
         # applying 2D convolution
         # nn.Conv2d(in_channel, out_channel, kernel_size)
         # 3 since we are considering RGB and then as we create
@@ -33,7 +52,7 @@ class CNN(nn.Module):
         # nn.Linear(in_feat, out_feat)
         # combining all the features extracted from convulutional 
         # layers (input size) into a vector (output size).
-        self.fc1 = nn.Linear(1600, 128)
+        self.fc1 = nn.Linear(num_inputs, num_neurons)
 
         # ReLU(inplace=False)
         # ReLU is a mathematical function which is applied and then the model
@@ -42,7 +61,7 @@ class CNN(nn.Module):
 
         # combining the new activated layer and then determining
         # which class they should be part of (classification)
-        self.fc2 = nn.Linear(128, num_classes)
+        self.fc2 = nn.Linear(num_neurons, num_classes)
 
     # function to pass the image through the CNN model
     def forward(self, x):
@@ -56,3 +75,4 @@ class CNN(nn.Module):
         out = self.fc1(out)
         out = self.relu(out)
         return self.fc2(out)
+
