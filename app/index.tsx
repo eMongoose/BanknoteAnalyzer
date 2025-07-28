@@ -155,7 +155,7 @@ export default function HomeScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#ffffffff' }}
-      headerImage={<Image style={styles.banner} source={require('@/assets/images/partial-react-logo.png')} />}>
+      headerImage={<Image style={styles.banner} source={require('@/assets/images/banner.png')} />}>
 
       <ThemedView style={{ height: 500 }}>
         {/* Title: Coin Identifier*/}
