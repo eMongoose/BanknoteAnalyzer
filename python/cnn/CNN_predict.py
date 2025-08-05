@@ -6,6 +6,10 @@ from PIL import Image
 from ..dataset.dataloader import transform
 from .CNN import CNN
 
+def removeTransparency(img):
+  img = img.convert("RGBA")
+  bg = Image.new("RGBA", img.size, (255,255,255))
+  return Image.alpha_composite(bg, img).convert("RGB")
 
 def predict(img_path):
   local_device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -19,6 +23,8 @@ def predict(img_path):
   # Image needs to be reshaped to include batch info (1)
   # This is because model expects multiple images to be loaded
   image = Image.open(img_path)
+  if (image.has_transparency_data):
+    image = removeTransparency(image)
   image = transform(image).reshape(-1, 3, 32, 32)
   image = image.to(local_device)
 
