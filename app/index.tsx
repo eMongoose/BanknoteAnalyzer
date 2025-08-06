@@ -18,7 +18,7 @@ import {
 } from 'react-native-image-picker';
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
-const API_BASE = "https://banknoteanalyzer-so7n.onrender.com/"
+const API_BASE = "https://banknoteanalyzer-so7n.onrender.com"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 interface coinDataInterface {
