@@ -17,10 +17,13 @@ import {
   launchImageLibrary
 } from 'react-native-image-picker';
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
-import { EXPO_PUBLIC_API_URL } from '@env';
 
-export const API_BASE = EXPO_PUBLIC_API_URL;
-
+export const API_BASE = Platform.select({
+  web: "http://localhost:5000",
+  ios: "http://localhost:5000",
+  android: "http://10.0.2.2:5000",
+  default: "http://192.168.68.54:5000",
+});
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 interface coinDataInterface {
   name: String
