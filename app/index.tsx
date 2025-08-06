@@ -147,7 +147,7 @@ export default function HomeScreen() {
       const json = await response.json();
       setCoinData(json);
       setModalVisible(true);
-      
+
     } catch (err) {
       console.error("Analyze failed:", err);
     };
@@ -351,4 +351,5 @@ export default function HomeScreen() {
       textAlign: 'center',
       color: 'black'
     }
-  });
+  })
+};
