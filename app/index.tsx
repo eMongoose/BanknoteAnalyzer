@@ -18,12 +18,8 @@ import {
 } from 'react-native-image-picker';
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
-export const API_BASE = Platform.select({
-  web: "http://localhost:5000",
-  ios: "http://localhost:5000",
-  android: "http://10.0.2.2:5000",
-  default: "http://192.168.68.54:5000",
-});
+export const API_BASE = "https://banknoteanalyzer-so7n.onrender.com";
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 interface coinDataInterface {
   name: String
@@ -140,6 +136,7 @@ export default function HomeScreen() {
       setCoinData(json);
       setModalVisible(true);
     } catch (err) {
+      console.error("The server is likely offline.")
       console.error("Analyze failed:", err);
     };
   }
