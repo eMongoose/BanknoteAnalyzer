@@ -17,8 +17,9 @@ import {
   launchImageLibrary
 } from 'react-native-image-picker';
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
+import { EXPO_PUBLIC_API_URL } from '@env';
 
-const API_BASE = "http://192.168.68.54:5000"
+export const API_BASE = EXPO_PUBLIC_API_URL;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 interface coinDataInterface {
