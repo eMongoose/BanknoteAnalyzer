@@ -2,6 +2,8 @@
 # folders
 __pycache__/
 
+node_modules/
+
 # files marked ignore
 ignore_*
 

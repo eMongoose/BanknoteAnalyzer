@@ -93,70 +93,59 @@ export default function HomeScreen() {
 
   const analyzeCoin = async () => {
     console.log("Analyzing the image...");
-
-    // error  handling
     if (!img) {
       console.log("Error 1: There is no image selected!")
       return;
     }
+    // https://developer.mozilla.org/en-US/docs/Web/API/FormData
+    // build a formdata object
+    const form = new FormData();
+    const fileName = img.split('/').pop() || `coin_${Date.now()}.jpg`; // clean up the path to get the filename
+    const ext = fileName.split('.').pop()?.toLowerCase(); // cleanup the filename to get the MIME extension
+    const mime = ext === 'png' // file of MIME type (image, jpeg, etc.)
+      ? 'image/png'
+      : ext === 'heic'
+        ? 'image/heic'
+        : 'image/jpeg';
 
+    // append it to the formdata
+    // https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
+    if (Platform.OS === 'web') {
+      const imageResponse = await fetch(img);
+      const blob = await imageResponse.blob();
+      form.append('image', new File([blob], fileName, { type: mime }));
+    }
+    else {
+      form.append('image', {
+        uri: img,
+        name: fileName,
+        type: mime,
+      } as any);
+    }
+    // fetch and send formdata to the server
     try {
-      // https://developer.mozilla.org/en-US/docs/Web/API/FormData
-      // build a formdata object
-      const form = new FormData();
-      const fileName = img.split('/').pop() ?? `coin_${Date.now()}.jpg`; // clean up the path to get the filename
-      const ext = fileName.split('.').pop()?.toLowerCase(); // cleanup the filename to get the MIME extension
-
-      // file of MIME type (image, jpeg, etc.)
-      const mime =
-        ext === 'png' ? 'image/png' :
-          ext === 'heic' ? 'image/heic' :
-            'image/jpeg';
-
-      // append it to the formdata
-      // https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
-      if (Platform.OS === 'web') {
-        // Fetch the blob from the web URL
-        const response = await fetch(img);
-        const blob = await response.blob();
-
-        form.append('image', new File([blob], fileName, { type: mime }));
-      } else {
-        // Native (iOS/Android)
-        form.append('image', {
-          uri: img,
-          name: fileName,
-          type: mime,
-        } as any);
-      }
-
-      // fetch and send formdata to the server
       const response = await fetch(`${API_BASE}/getCoin`, {
         method: 'POST',
         body: form,
         headers: { Accept: 'application/json', },
       });
-
-      // error handling
       if (!response.ok) {
-        throw new Error("Error 2");
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${response.status}`);
       }
-
-      const json: coinDataInterface = await response.json();
+      const json = await response.json();
       setCoinData(json);
-      // console.log("Data: ", json);
-      setModalVisible(true)
-    }
-    catch (error) {
-      console.log("Error 3: ", error);
-    }
-  };
+      setModalVisible(true);
+    } catch (err) {
+      console.error("Analyze failed:", err);
+    };
+  }
   /////////////////////////////////////////////////////////////////////////////////////////////////
   // main function
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#ffffffff' }}
-      headerImage={<Image style={styles.banner} source={require('@/assets/images/partial-react-logo.png')} />}>
+      headerImage={<Image style={styles.banner} source={require('@/assets/images/banner.png')} />}>
 
       <ThemedView style={{ height: 500 }}>
         {/* Title: Coin Identifier*/}
