@@ -9,9 +9,7 @@ names = ["Nickel", "Penny", "Quarter"]
 values = [0.05, 0.01, 0.25]
 
 app = Flask(__name__)
-CORS(app, resources={
-  r"/getCoin": {"origins": ["https://banknote-analyzer-mdym.vercel.app"]}
-})
+CORS(app)
 
 @app.route("/")
 def index():
