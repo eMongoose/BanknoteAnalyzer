@@ -116,7 +116,11 @@ export default function HomeScreen() {
       // https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
       if (Platform.OS === 'web') {
         // Fetch the blob from the web URL
-        const response = await fetch(img);
+        const response = await fetch(`${API_BASE}/getCoin`, {
+          method: 'POST',
+          body: form,
+          headers: { Accept: 'application/json' }, // no manual 'Content-Type'
+        });
         const blob = await response.blob();
 
         form.append('image', new File([blob], fileName, { type: mime }));
