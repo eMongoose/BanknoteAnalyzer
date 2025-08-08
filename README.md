@@ -1,4 +1,4 @@
-# Coin Analzyer
+# Coin Analyzer Setup Guide
 
 ### 1. Training the model
 1. Run command `python train_model.py` from main directory
