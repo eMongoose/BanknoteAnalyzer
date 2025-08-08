@@ -150,7 +150,7 @@ export default function HomeScreen() {
       <ThemedView style={{ height: 500 }}>
         {/* Title: Coin Identifier*/}
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Coin Identifier</ThemedText>
+          <ThemedText type="title">Coin Analyzer</ThemedText>
         </ThemedView>
 
         {isVisible ?
