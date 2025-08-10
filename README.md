@@ -1,19 +1,47 @@
+
 # Coin Analyzer Setup Guide
 
-### 1. Training the model
+---
+# Training the model
+
 1. Run command `python train_model.py` from main directory
 
-There are 2 options to running the coin analyzer after the model is trained.
+There are 2 options to running the coin analyzer after the model is trained:
 
-## A) Run Coin Analyzer through CLI
+## Option 1: Run Coin Analyzer through CLI
+
 This option allows for CLI interaction with the app. This option can be run directly from the console.
-### 2. Run CLI command
-1. Run commad `python main.py [image path]`
 
-## B) Run Coin Analyzer through web server
+1. Run command:
+
+```
+python main.py [image path]
+```
+
+## Option 2: Run Coin Analyzer through web server
+
 This option allows for GUI interaction with the app. This option requires more set up.
-### 2. Start Python server
+
 1. Install dependencies from `requirements.txt`
-2. Run command `flask --app server run` from main directory
-### 3. Start Web UI
-1. (...)
+
+2. From the main directory, run the command:
+
+```
+flask --app server run
+``` 
+
+---
+# 3. Start Web UI
+
+Since the program is hosted externally, you can visit the website(s) and use the program yourself!
+
+1. Start the server by visiting the [Render site](https://banknoteanalyzer-so7n.onrender.com/)
+
+When you visit this link, it will take about 2-3 minutes for it to start up. Please do not leave the site. You will know it is ready when you see a single line:
+
+```
+Server Active
+```
+
+2. Interact with the program by visiting the [Vercel site](https://banknote-analyzer-mdym.vercel.app/)
+
