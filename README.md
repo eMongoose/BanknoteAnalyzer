@@ -54,9 +54,10 @@ If you run into any error with this command, try:
 ```
 npx expo start -- tunnel
 ```
-
 Try out the application! If you find that the analyze button does not work, you must run the ```server.py```file.
-*Setup guide end*
+
+Setup guide end
+
 ---
 # Visit the website 
 
