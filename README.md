@@ -44,7 +44,9 @@ pip install -r requirements.txt
 
 ```
 flask --app server run
-``` 
+```
+4. Follow console instructions, and record the local IP address of the server
+
 ### 4. Start Web App
 
 1. In the main terminal, install the required packages:
@@ -52,13 +54,20 @@ flask --app server run
 ```
 npm install
 ```
+2. Go to line 21 in [app/index.tsx](app/index.tsx) and replace the http link with the IP of the python server
+```
+# Replace this line
+export const API_BASE = "https://banknoteanalyzer-so7n.onrender.com";
+# With this
+export const API_BASE = "[IP_ADDRESS_HERE]"; #Substitute with IP given when starting python server
+```
 
-2. After installing the packages, run the following command:
+3. Start the program by running the following command:
 
 ```
 npx expo start
 ```
-3. Follow console instructions to navigate to app web page
+4. Follow console instructions to navigate to app web page
 
 If you run into any error with the start command, try:
 
