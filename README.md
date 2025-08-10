@@ -1,5 +1,6 @@
 
 # Coin Analyzer Setup Guide
+Requirements: NodeJS (with the npm package installed)
 
 ---
 # Training the model
@@ -32,6 +33,32 @@ flask --app server run
 
 ---
 # 3. Start Web UI
+
+## Install the required packages
+
+1. In the main terminal, run the following command:
+
+```
+npm install
+```
+## Start the Web UI
+
+1. After installing the packages, run the following command:
+
+```
+npx expo start
+```
+
+If you run into any error with this command, try:
+
+```
+npx expo start -- tunnel
+```
+
+Try out the application! If you find that the analyze button does not work, you must run the ```server.py```file.
+*Setup guide end*
+---
+# Visit the website 
 
 Since the program is hosted externally, you can visit the website(s) and use the program yourself!
 
