@@ -5,8 +5,9 @@ Requirements: Python, Flask, NodeJS (with the npm package installed)
 ---
 
 ### 1. Download Dataset
-1. Download and extract dataset samples from [here](https://www.kaggle.com/datasets/sergiosaharovskiy/uscoins)
-2. Move samples into `Dataset/` folder. Further details for file structure are included in the folder's [README.md](Dataset/README.md)
+1. Find dataset [here](https://www.kaggle.com/datasets/sergiosaharovskiy/uscoins)
+2. Download dataset as a zip file
+3. Extract contents into `Dataset/` folder. Further details for file structure are included in the folder's [README.md](Dataset/README.md)
 
 ### 2. Training the model
 
