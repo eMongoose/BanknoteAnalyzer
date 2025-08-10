@@ -72,7 +72,7 @@ npx expo start
 If you run into any error with the start command, try:
 
 ```
-npx expo start -- tunnel
+npx expo start --tunnel
 ```
 Try out the application! If you find that the analyze button does not work, you must run the ```server.py``` file.
 
