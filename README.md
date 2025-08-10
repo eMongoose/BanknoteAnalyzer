@@ -1,6 +1,6 @@
 
 # Coin Analyzer Setup Guide
-Requirements: NodeJS (with the npm package installed)
+Requirements: Python, Flask, NodeJS (with the npm package installed)
 
 ---
 # Training the model
