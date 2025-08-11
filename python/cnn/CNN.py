@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class CNN(nn.Module):
-    def __init__(self, num_classes: int, channels = (128, 128, 256), dropout = 0.5):
+    def __init__(self, num_classes: int, channels = (64, 128, 256), dropout = 0.5):
         super(CNN, self).__init__()
 
         # assigning channel sizes for each stage of the network
