@@ -2,57 +2,51 @@ import torch
 import torch.nn as nn
 
 class CNN(nn.Module):
-    def __init__(self, num_classes):
+    def __init__(self, num_classes: int, channels = (64, 128, 256), dropout = 0.5):
         super(CNN, self).__init__()
+
+        # assigning channel sizes for each stage of the network
+        c1, c2, c3 = channels 
+
+        # nn.sequential chains layers in the order given
+        # each layer applies conv, BN, and ReLU
+        # convolutional layers identify spatial filters (edges, textures, shapes)
+        # padding = 1 is used to maintain spatial size of inputs before pooling
+        # BN stabilizes training by adjusting the inputs and speeds up training
+        # ReLU is a non-linear activation function (helps network learn more compelx patterns)
+        # max pooling condenses information by halving the spatial dimensions
+        # total of 11 trainable layers, 5 conv, 5 bn, 1 linear
+
+        self.features = nn.Sequential(
+            nn.Conv2d(3, c1, 3, padding = 1), nn.BatchNorm2d(c1), nn.ReLU(),
+            nn.Conv2d(c1, c1, 3, padding = 1), nn.BatchNorm2d(c1), nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(c1, c2, 3, padding = 1), nn.BatchNorm2d(c2), nn.ReLU(),
+            nn.Conv2d(c2, c2, 3, padding = 1), nn.BatchNorm2d(c2), nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(c2, c3, 3, padding = 1), nn.BatchNorm2d(c3), nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        # AdaptiveAvgPool averages each channel map so output  size is (c3, 1, 1)
+        self.gap = nn.AdaptiveAvgPool2d(1)
         
-        # applying 2D convolution
-        # nn.Conv2d(in_channel, out_channel, kernel_size)
-        # 3 since we are considering RGB and then as we create
-        # more feature maps (32), as the model learns higher-level
-        # features and finds more differentiating attributes
-        # padding (default = 0): refers to addition of extra pixels around the edge of the input image
-        # stride (default = 1): refers to the number of pixels each kernel moves across the image input 
-        self.conv1 = nn.Conv2d(3, 32, 3) 
+        # dropout randomly zeroes features for to reduce overfitting (for training)
+        self.dropout = nn.Dropout(dropout)
 
-        # takes 32 inputs and creates 32 output channels by
-        # applying 32 filters (since out_channel=32) of size 3x3 
-        # allowing the model to pick up more abstract features
-        self.conv2 = nn.Conv2d(32, 32, 3)
+        # linear maps c3 features to class scores (logits) guiding the prediction
+        self.classify = nn.Linear(c3, num_classes)
         
-        # pooling layers (resizing image)
-        # nn.MaxPool2d(kernel_size, stride)
-        self.max_pool1 = nn.MaxPool2d(2, 2)
-
-        # applying more 2D convolution
-        self.conv3 = nn.Conv2d(32,64,3)
-        self.conv4 = nn.Conv2d(64,64,3)
-        
-        # pooling layers (resizing image)
-        self.max_pool2 = nn.MaxPool2d(2,2)
-
-        # nn.Linear(in_feat, out_feat)
-        # combining all the features extracted from convulutional 
-        # layers (input size) into a vector (output size).
-        self.fc1 = nn.Linear(1600, 128)
-
-        # ReLU(inplace=False)
-        # ReLU is a mathematical function which is applied and then the model
-        # determines whether it should be activated
-        self.relu = nn.ReLU()
-
-        # combining the new activated layer and then determining
-        # which class they should be part of (classification)
-        self.fc2 = nn.Linear(128, num_classes)
-
-    # function to pass the image through the CNN model
+    # forward pass dataset through model
     def forward(self, x):
-        out = self.conv1(x)
-        out = self.conv2(out)
-        out = self.max_pool1(out)
-        out = self.conv3(out)
-        out = self.conv4(out)
-        out = self.max_pool2(out)       
-        out = out.reshape(out.size(0), -1) # built in PyTorch function to flatten features
-        out = self.fc1(out)
-        out = self.relu(out)
-        return self.fc2(out)
+        
+        # passes images through the feature extracts (trainable layers)
+        x = self.features(x)
+        
+        # gloabl average pooling flattens output size to (batch_size, c3)
+        x = self.gap(x).flatten(1)
+        
+        # dropout to reduce overfitting the model to training dataset (for training)
+        x = self.dropout(x)
+        
+        # returns raw scores for each class
+        return self.classify(x)
