@@ -48,5 +48,7 @@ def train_CNN(epochs = 20, learning_rate = 0.001, debugging = False):
     
     print(f'Accuracy of the network on the train images: {100 * correct / total} %')
 
+  if (os.path.exists(os.path.join("python", "Models", "CNN.torch"))):
+    os.remove(os.path.join("python", "Models", "CNN.torch"))
   print("Saving model to /python/Models/")
   torch.save(model.state_dict(), os.path.join("python", "Models", "CNN.torch"))
