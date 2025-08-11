@@ -11,7 +11,7 @@ BATCH_SIZE = 64
 NUM_WORKERS = 0 # Investigate RunTimeError when increasing this value
 
 transform = transforms.Compose([
-  transforms.Resize((32,32)),
+  transforms.Resize((128,128)),
   transforms.ToTensor(),
   transforms.Normalize((0.5, 0.5, 0.5),(0.5, 0.5, 0.5))
 ])
