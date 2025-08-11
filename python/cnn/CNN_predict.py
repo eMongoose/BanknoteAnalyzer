@@ -26,7 +26,7 @@ def predict(file):
   image = Image.open(file)
   if image.mode in ("RGBA", "LA") or (image.mode == "P" and 'transparency' in image.info):
     image = removeTransparency(image)
-  image = transform(image).reshape(-1, 3, 32, 32)
+  image = transform(image).reshape(-1, 3, 64, 64)
   image = image.to(local_device)
 
   # Predict on image
